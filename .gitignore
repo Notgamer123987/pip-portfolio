@@ -1,0 +1,13 @@
+# Scratch & duplicate raw assets (>100MB blocked by GitHub)
+public/
+*.m4a
+test_voice.wav
+
+# Machine Learning models (>50MB, generated voices are in assets/audio/voice)
+*.onnx
+
+# System & Editor files
+.DS_Store
+Thumbs.db
+*.log
+.vscode/

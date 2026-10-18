@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dream">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pip's Midnight Nursery 🌙 | Junior Dream Engineer</title>
+  <meta name="description" content="Sweet Dreams for the Good. Curious Nightmares for the Rest. Official website of Pip, the Junior Dream Engineer.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Retro Dreamy Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Gaegu:wght@400;700&family=VT323&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Local Three.js & GLTF Loader for 3D Sound Box (100% offline & resilient) -->
+  <script src="assets/js/three.min.js"></script>
+  <script src="assets/js/GLTFLoader.js"></script>
+  <script src="assets/js/OrbitControls.js"></script>
+</head>
+<body class="theme-dream">
+  <!-- Stardust Cursor Canvas -->
+  <canvas id="cursor-canvas" class="cursor-canvas" aria-hidden="true"></canvas>
+
+  <!-- Ambient Floating Background Elements (with Cursor Depth Parallax) -->
+  <div class="ambient-stars" id="ambient-stars" aria-hidden="true">
+    <span class="star-particle star-1" data-depth="0.06">✦</span>
+    <span class="star-particle star-2" data-depth="0.12">★</span>
+    <span class="star-particle star-3" data-depth="0.04">✦</span>
+    <span class="star-particle star-4" data-depth="0.09">✧</span>
+    <span class="star-particle star-5" data-depth="0.14">★</span>
+    <span class="star-particle star-6" data-depth="0.07">✦</span>
+    <span class="cloud-fog cloud-1" data-depth="0.02"></span>
+    <span class="cloud-fog cloud-2" data-depth="0.03"></span>
+  </div>
+
+  <!-- Atmospheric Nightmare Mist & Lighting Overlay (Transforms Entire Website) -->
+  <div class="nightmare-atmosphere" id="nightmare-atmosphere" aria-hidden="true"></div>
+
+  <!-- ========================================================
+       SECTION A: TINY NURSERY BOOT SCREEN (Retro BIOS sequence)
+       ======================================================== -->
+  <aside id="boot-screen" class="boot-screen" role="dialog" aria-label="Nursery System Boot Sequence">
+    <div class="crt-scanlines" aria-hidden="true"></div>
+    <div class="boot-container">
+      <div class="boot-header">
+        <span class="boot-logo">🌙 MIDNIGHT NURSERY BIOS v2.04</span>
+        <span class="boot-clock" id="boot-clock">00:00:00 ST</span>
+      </div>
+      <div class="boot-body" id="boot-log" aria-live="polite">
+        <!-- Lines typed via JavaScript -->
+      </div>
+      <div class="boot-status-row">
+        <div class="boot-indicator">
+          <span class="pulse-dot"></span>
+          <span id="boot-status-text">INITIALIZING DREAM CORE...</span>
+        </div>
+        <div class="boot-actions">
+          <button id="btn-boot-skip" class="retro-btn" type="button" title="Skip boot sequence (Esc)">SKIP [ESC]</button>
+          <button id="btn-boot-enter" class="retro-btn btn-primary" type="button" style="display: none;">ENTER NURSERY [CLICK]</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       NAVIGATION BAR & AUDIO HUD
+       ======================================================== -->
+  <header class="nursery-nav" id="nursery-nav">
+    <div class="nav-container">
+      <a href="#hero" class="nav-brand" aria-label="Pip's Midnight Nursery Homepage">
+        <img src="assets/images/favicon.svg" alt="" class="nav-logo" width="36" height="36">
+        <div class="brand-text">
+          <span class="brand-title">Pip's Midnight Nursery</span>
+          <span class="brand-sub">haX.baby • Track 1</span>
+        </div>
+      </a>
+
+      <!-- Quick Section Jump Links -->
+      <nav class="nav-menu" aria-label="Main Navigation">
+        <a href="#meet-pip" class="nav-link">Meet Pip</a>
+        <a href="#scroll-story" class="nav-link">Story</a>
+        <a href="#lullaby-lab" class="nav-link">3D Sound Box 🦄</a>
+        <a href="#nightlights" class="nav-link">Nightlights</a>
+        <a href="#delivery-console" class="nav-link">Deliveries</a>
+        <a href="#guestbook" class="nav-link">Guestbook</a>
+      </nav>
+
+      <!-- Global Utility Controls -->
+      <div class="nav-controls">
+        <!-- Master Mute Toggle -->
+        <button id="btn-mute-toggle" class="control-btn" type="button" aria-label="Toggle Sound" title="Toggle Sound">
+          <span class="control-icon" id="mute-icon">🔊</span>
+          <span class="control-label" id="mute-label">SOUND: ON</span>
+        </button>
+
+        <!-- Theme Toggle (Dream Mode <-> Nightmare Mode) -->
+        <button id="btn-theme-toggle" class="control-btn theme-toggle-btn" type="button" aria-label="Toggle Theme Mode" title="Toggle Dream/Nightmare Mode">
+          <span class="control-icon" id="theme-icon">🌸</span>
+          <span class="control-label" id="theme-label">DREAM MODE</span>
+        </button>
+
+        <!-- Memory Status Pill -->
+        <button id="btn-memory-modal" class="control-btn memory-btn" type="button" aria-label="Open Pip's Memory" title="View Memory & Settings">
+          <span class="control-icon">🧠</span>
+          <span class="control-label">MEMORY</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrap -->
+  <main id="main-content">
+
+    <!-- ========================================================
+         SECTION B: HERO SECTION (With Interactive Cursor-Tracking Eyes!)
+         ======================================================== -->
+    <section id="hero" class="section hero-section" aria-labelledby="hero-title">
+      <div class="container hero-grid">
+        <!-- Left: Text & Badges -->
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            <span id="hero-status-pill">OFFICIAL JUNIOR DREAM ENGINEER</span>
+          </div>
+
+          <h1 id="hero-title" class="hero-title">
+            I make dreams.<br>
+            <span class="hero-title-accent">Occasionally, trouble.</span>
+          </h1>
+
+          <p class="hero-tagline">
+            “Sweet Dreams for the Good. Curious Nightmares for the Rest.”
+          </p>
+
+          <p class="hero-description">
+            Welcome to the top floor of Cloud 9½. I'm Pip—part starlight artisan, part cloud fluffier, and full-time bedtime guardian. Pull up a pillow, explore my dreamy inventions, or watch my eyes follow your starlight trail.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="hero-actions">
+            <a href="#lullaby-lab" class="btn btn-primary" id="btn-hero-explore">
+              <span class="btn-icon">🦄</span> 3D Music Box
+            </a>
+            <a href="#meet-pip" class="btn btn-secondary" id="btn-hero-meet">
+              <span class="btn-icon">🎀</span> Meet Pip
+            </a>
+            <button class="btn btn-outline" id="btn-hero-chat" type="button">
+              <span class="btn-icon">💬</span> Talk to Pip
+            </button>
+          </div>
+
+          <!-- Mini Status HUD -->
+          <div class="hero-hud">
+            <div class="hud-item">
+              <span class="hud-label">NURSERY TIME</span>
+              <span class="hud-val" id="hud-time">12:00 AM ST</span>
+            </div>
+            <div class="hud-item">
+              <span class="hud-label">MOON PHASE</span>
+              <span class="hud-val">🌙 Waxing Crescent</span>
+            </div>
+            <div class="hud-item">
+              <span class="hud-label">DELIVERED</span>
+              <span class="hud-val odometer-snippet" id="hud-delivered-snippet">104,287</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Pip Character Showcase -->
+        <div class="hero-character-stage">
+          <div class="plush-frame">
+            <div class="aura-glow" id="hero-aura"></div>
+            
+            <!-- Character Image / Dynamic Swap -->
+            <div class="character-wrapper" id="hero-character-wrapper" title="Pip the Junior Dream Engineer (Click for a surprise!)">
+              <img 
+                id="pip-hero-img" 
+                src="assets/images/pip-cute.png" 
+                alt="Pip, the Junior Dream Engineer in cute plush pajamas with a sleepy skull face" 
+                class="pip-character-img"
+                loading="eager"
+              >
+
+              <!-- Sparkle Badges -->
+              <span class="orbit-particle p1">✨</span>
+              <span class="orbit-particle p2">⭐</span>
+              <span class="orbit-particle p3">💤</span>
+
+              <!-- Secret Midnight Rune Key (Subtle Easter Egg Trigger) -->
+              <button class="secret-key-trigger" id="secret-key-trigger" type="button" aria-label="A tiny silver key glints in the starlight" title="A tiny silver key glints on Pip's ribbon... (Click to inspect)">
+                <span class="secret-key-icon">🗝️</span>
+                <span class="secret-key-halo"></span>
+              </button>
+            </div>
+
+            <!-- Voice Bubble Trigger -->
+            <div class="hero-speech-bubble" id="hero-speech-bubble" role="status" aria-live="polite">
+              <span class="bubble-tail"></span>
+              <p class="bubble-text" id="hero-dialogue-text">“Oh! A new dreamer. Welcome to my tiny corner of midnight.”</p>
+              <button class="btn-speak-icon" id="btn-speak-hero" type="button" aria-label="Replay Pip's Voice">🔊</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION C: MEET PIP (Character Dossier & Clickable Facts)
+         ======================================================== -->
+    <section id="meet-pip" class="section meet-section" aria-labelledby="meet-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">DREAM ENGINEER DOSSIER</span>
+          <h2 id="meet-title" class="section-title">Meet Pip ✦ Cloud 9½</h2>
+          <p class="section-subtitle">Click his fact badges below to uncover how a baby skull-faced engineer runs midnight operations.</p>
+        </div>
+
+        <!-- Scrapbook Grid -->
+        <div class="dossier-grid">
+          <!-- Card 1: Identity -->
+          <div class="dossier-card">
+            <div class="card-icon">🎀</div>
+            <h3>Official Identity</h3>
+            <p><strong>Name:</strong> Pip</p>
+            <p><strong>Rank:</strong> Junior Dream Engineer (Level 1)</p>
+            <p><strong>Affiliation:</strong> haX.baby Bedtime Guild</p>
+            <p><strong>Signature Outfit:</strong> Star-print footie pajamas & plush nightcap with velvet bow.</p>
+          </div>
+
+          <!-- Card 2: Personality -->
+          <div class="dossier-card">
+            <div class="card-icon">💤</div>
+            <h3>Personality Matrix</h3>
+            <p>Gentle, fiercely protective of sleepy dreamers, constantly curious, and easily bribed with chamomile tea and warm sugar cookies.</p>
+          </div>
+
+          <!-- Card 3: Specialty -->
+          <div class="dossier-card">
+            <div class="card-icon">🌙</div>
+            <h3>Core Speciality</h3>
+            <p>Cloud fluffing to exactly 3.2 lbs of buoyant softness, harmonizing 432 Hz lullaby box gears, and catching fallen nightmare embers before they wake anyone up.</p>
+          </div>
+
+          <!-- Card 4: Home Base -->
+          <div class="dossier-card">
+            <div class="card-icon">⭐</div>
+            <h3>Home & Workshop</h3>
+            <p>The Starlight Attic, perched right beside the silver crescent moon. Decorated with jars of liquid starlight and antique ticking music boxes.</p>
+          </div>
+        </div>
+
+        <!-- Clickable Fact Pills -->
+        <div class="facts-wrapper">
+          <h3 class="facts-title">✦ Click Pip's Curious Secrets:</h3>
+          <div class="facts-pills" role="tablist" aria-label="Character Facts">
+            <button class="fact-pill active" type="button" data-fact="skull">💀 Why the skull face?</button>
+            <button class="fact-pill" type="button" data-fact="snack">🍪 Favorite midnight snack?</button>
+            <button class="fact-pill" type="button" data-fact="horns">😈 What about those little horns?</button>
+            <button class="fact-pill" type="button" data-fact="monsters">🧸 Policy on closet monsters?</button>
+            <button class="fact-pill" type="button" data-fact="tools">🔧 Pip's toolbag essentials?</button>
+          </div>
+
+          <!-- Fact Display Output -->
+          <div class="fact-display-card" id="fact-display-box" aria-live="polite">
+            <div class="fact-quote-mark">“</div>
+            <p class="fact-quote-text" id="fact-text">
+              All official Dream Engineers wear the ancient bone mask of slumber. It lets us walk between waking and dreaming realms without waking ourselves up! Plus, it keeps my sleepy skull nice and safe.
+            </p>
+            <div class="fact-author">— Pip, adjusting his nightcap</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION D: CINEMATIC SCROLL STORY (4 Scenes)
+         ======================================================== -->
+    <section id="scroll-story" class="section story-section" aria-labelledby="story-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">TALES OF THE NIGHT SHIFT</span>
+          <h2 id="story-title" class="section-title">Pip's Starlight Chronicles</h2>
+          <p class="section-subtitle">Four moments from the edge of sleep. Scroll or click through each chapter.</p>
+        </div>
+
+        <!-- Story Stepper Track -->
+        <div class="story-stepper">
+          <button class="story-step-btn active" data-step="0">1. The First Star</button>
+          <button class="story-step-btn" data-step="1">2. The Dream Lab</button>
+          <button class="story-step-btn" data-step="2">3. The Delivery Shift</button>
+          <button class="story-step-btn" data-step="3">4. The Other Assignment</button>
+        </div>
+
+        <!-- Scene Slides -->
+        <div class="story-carousel" id="story-carousel">
+          <!-- Scene 1 -->
+          <article class="story-scene active" data-scene="0">
+            <div class="scene-visual">
+              <div class="scene-icon-badge">✨</div>
+              <div class="scene-starlight"></div>
+            </div>
+            <div class="scene-content">
+              <span class="scene-num">CHAPTER 01</span>
+              <h3>The First Star</h3>
+              <p>Before dawn had a name, Pip caught his first falling star in a soft velvet mitten. It burned with cold lilac light and whispered the secret bedtime wishes of every child on earth.</p>
+              <div class="scene-dialogue">
+                <span class="dialogue-speaker">Pip:</span>
+                “Careful... they're still fresh out of the cosmos. If you don't catch them gently, they turn into morning dew before bedtime.”
+              </div>
+            </div>
+          </article>
+
+          <!-- Scene 2 -->
+          <article class="story-scene" data-scene="1">
+            <div class="scene-visual">
+              <div class="scene-icon-badge">🧪</div>
+              <div class="scene-starlight"></div>
+            </div>
+            <div class="scene-content">
+              <span class="scene-num">CHAPTER 02</span>
+              <h3>The Dream Lab</h3>
+              <p>High above the clouds, glass flasks hum with spun moonlight and distilled lavender vapors. Precision brass clockwork turns gently, calibrating sleep rhythms to match the resting heartbeat of the universe.</p>
+              <div class="scene-dialogue">
+                <span class="dialogue-speaker">Pip:</span>
+                “Two drops of liquid starlight, three pinches of lavender, and whatever you do—never shake the dream jar after midnight!”
+              </div>
+            </div>
+          </article>
+
+          <!-- Scene 3 -->
+          <article class="story-scene" data-scene="2">
+            <div class="scene-visual">
+              <div class="scene-icon-badge">🚀</div>
+              <div class="scene-starlight"></div>
+            </div>
+            <div class="scene-content">
+              <span class="scene-num">CHAPTER 03</span>
+              <h3>The Delivery Shift</h3>
+              <p>When the town clock strikes two, Pip buckles his satchel of slumber packages and slides down the Milky Way. Dogs dreaming of endless tennis balls, bakers dreaming of dough that kneads itself—all receive their deliveries on schedule.</p>
+              <div class="scene-dialogue">
+                <span class="dialogue-speaker">Pip:</span>
+                “Puptown, Stargazer Attic, Deep Sea Cradle... all dispatched before the rooster even clears his throat!”
+              </div>
+            </div>
+          </article>
+
+          <!-- Scene 4 -->
+          <article class="story-scene" data-scene="3">
+            <div class="scene-visual scene-nightmare-accent">
+              <div class="scene-icon-badge">😈</div>
+              <div class="scene-starlight"></div>
+            </div>
+            <div class="scene-content">
+              <span class="scene-num">CHAPTER 04</span>
+              <h3>The Other Assignment</h3>
+              <p>When the clock swings past three, the nursery lighting shifts. Shadows lengthen, and another shift begins. Some bad dreams are too stubborn for soft lullabies—they require a guardian with a little mischief of his own.</p>
+              <div class="scene-dialogue">
+                <span class="dialogue-speaker">Nightmare Pip:</span>
+                “Don't worry, dreamer. I only bite the bad dreams. And maybe an extra midnight cookie if you left one on the table.”
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Story Controls -->
+        <div class="story-nav-arrows">
+          <button id="btn-story-prev" class="retro-btn" type="button" aria-label="Previous Story Scene">◄ PREVIOUS SCENE</button>
+          <button id="btn-story-next" class="retro-btn btn-primary" type="button" aria-label="Next Story Scene">NEXT SCENE ►</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION E: INTERACTIVE PROJECT ONE: 3D SOUND BOX & LULLABY LAB
+         Featuring the 3D Unicorn Carousel Music Box & Relaxing Audio
+         ======================================================== -->
+    <section id="lullaby-lab" class="section lab-section" aria-labelledby="lab-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">3D INTERACTIVE SOUND BOX</span>
+          <h2 id="lab-title" class="section-title">The Starlight Music Box 🦄</h2>
+          <p class="section-subtitle">A handcrafted 3D unicorn carousel music box with winding key. Spin it in 3D, wind up the spring, and drift away to soothing lullabies.</p>
+        </div>
+
+        <div class="lullaby-3d-console">
+          <div class="console-grid">
+            <!-- Left: 3D Canvas Viewport -->
+            <div class="box-3d-viewport" id="box-3d-container">
+              <!-- Three.js Canvas -->
+              <canvas id="lullaby-box-3d-canvas" class="lullaby-box-canvas"></canvas>
+
+              <!-- Image Fallback (if WebGL unavailable) -->
+              <div class="box-3d-fallback" id="box-3d-fallback" style="display: none;">
+                <img src="assets/images/lullaby_box.png" alt="Handcrafted Unicorn Music Box" class="fallback-box-img">
+              </div>
+
+              <!-- Sparkle & Musical Note Particles overlay -->
+              <div class="music-box-sparkles" id="box-sparkles-container" aria-hidden="true"></div>
+
+              <!-- 3D Viewport Badges & Hint -->
+              <div class="viewport-badge-top">
+                <span class="live-dot"></span> 3D REAL-TIME SOUND BOX • DRAG TO ROTATE
+              </div>
+            </div>
+
+            <!-- Right: Music Box Controls & Soundtrack Player -->
+            <div class="box-controls-panel">
+              <div class="panel-header">
+                <h3>🦄 Pip's Bedtime Music Box</h3>
+                <span class="music-tempo-tag" id="music-spring-status">Spring Tension: Ready</span>
+              </div>
+
+              <p class="box-description">
+                Crafted with soft clay textures, golden filigree, and a rotating rainbow unicorn. Click <strong>Wind Up</strong> or press play to release gentle lullaby waves and floating golden star notes.
+              </p>
+
+              <!-- Audio Player Status & Track Info -->
+              <div class="soundtrack-card">
+                <div class="soundtrack-info">
+                  <span class="soundtrack-title">🎵 "Soothing Moonlight & Water Lullaby"</span>
+                  <span class="soundtrack-sub">From Pip's 3-Hour Relaxing Sleep Collection</span>
+                </div>
+                
+                <!-- Audio Progress Scrubber -->
+                <div class="audio-progress-bar" id="audio-progress-container">
+                  <div class="audio-progress-fill" id="audio-progress-fill"></div>
+                </div>
+
+                <div class="audio-time-row">
+                  <span id="audio-cur-time">0:00</span>
+                  <span id="audio-tot-time">3:30</span>
+                </div>
+              </div>
+
+              <!-- Primary Action Buttons -->
+              <div class="box-action-row">
+                <button id="btn-wind-box" class="btn btn-primary btn-wind" type="button">
+                  <span class="btn-icon">🗝️</span> WIND UP MUSIC BOX
+                </button>
+                <button id="btn-play-relaxing" class="btn btn-secondary" type="button" title="Play lullaby from beginning">
+                  <span id="btn-play-relaxing-icon">▶</span> <span id="btn-play-relaxing-text">Play Lullaby</span>
+                </button>
+                <button id="btn-pause-relaxing" class="btn btn-outline" type="button" style="display: none;" title="Pause Lullaby">
+                  ⏸ Pause
+                </button>
+                <button id="btn-lullaby-intro" class="btn btn-outline" type="button" title="Hear Pip speak introduction">
+                  🗣️ Spoken Intro
+                </button>
+              </div>
+
+              <!-- Secondary Synthesizer Mood Bar (Music Box Chimes) -->
+              <div class="mb-mood-bar" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--card-border);">
+                <span class="mb-bar-label">OR PLAY HARMONIC CHIMES:</span>
+                <div class="mood-chips" role="radiogroup" aria-label="Lullaby Moods">
+                  <button class="mood-chip active" data-mood="cloud" role="radio" aria-checked="true" type="button">
+                    🌸 Cloud Float
+                  </button>
+                  <button class="mood-chip" data-mood="starry" role="radio" aria-checked="false" type="button">
+                    ⭐ Starry Night
+                  </button>
+                  <button class="mood-chip" data-mood="rain" role="radio" aria-checked="false" type="button">
+                    🌧️ Cozy Rain
+                  </button>
+                  <button class="mood-chip nightmare-mood" data-mood="midnight" role="radio" aria-checked="false" type="button">
+                    😈 Midnight Shift
+                  </button>
+                </div>
+              </div>
+
+              <!-- Interactive Tine Keys -->
+              <div class="comb-tines" id="comb-tines" style="margin-top: 1rem;">
+                <button class="tine-key" data-note="C4" type="button" aria-label="Play C4"><span>1</span></button>
+                <button class="tine-key" data-note="D4" type="button" aria-label="Play D4"><span>2</span></button>
+                <button class="tine-key" data-note="E4" type="button" aria-label="Play E4"><span>3</span></button>
+                <button class="tine-key" data-note="G4" type="button" aria-label="Play G4"><span>4</span></button>
+                <button class="tine-key" data-note="A4" type="button" aria-label="Play A4"><span>5</span></button>
+                <button class="tine-key" data-note="C5" type="button" aria-label="Play C5"><span>6</span></button>
+                <button class="tine-key" data-note="D5" type="button" aria-label="Play D5"><span>7</span></button>
+                <button class="tine-key" data-note="E5" type="button" aria-label="Play E5"><span>8</span></button>
+              </div>
+
+              <div class="mb-hint" style="margin-top: 0.75rem;">
+                💡 <em>Click the 3D model to spin the unicorn and tap keys 1–8 to chime along!</em>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION F: INTERACTIVE PROJECT TWO: NIGHTLIGHT COLLECTION
+         ======================================================== -->
+    <section id="nightlights" class="section lights-section" aria-labelledby="lights-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">INTERACTIVE PROJECT 02</span>
+          <h2 id="lights-title" class="section-title">The Nightlight Collection 🏮</h2>
+          <p class="section-subtitle">Every bedside light holds a specific dream safe from the cold. Activate one to illuminate the nursery.</p>
+        </div>
+
+        <div class="nightlights-grid" role="radiogroup" aria-label="Nightlights">
+          <!-- Light 1: Moon Rabbit -->
+          <div class="nightlight-card" data-light="rabbit" tabindex="0" role="radio" aria-checked="false">
+            <div class="lamp-fixture lamp-rabbit">
+              <div class="lamp-glow"></div>
+              <div class="lamp-icon">🐇</div>
+            </div>
+            <h3 class="lamp-title">Moon Rabbit</h3>
+            <span class="lamp-tone">Warm Amber Glow</span>
+            <p class="lamp-dream-preview">A field of sweet clover under twin moons where soft rabbits teach you how to hop across clouds.</p>
+            <button class="btn-lamp-toggle" type="button">Activate Light</button>
+          </div>
+
+          <!-- Light 2: Cosmic Whale -->
+          <div class="nightlight-card" data-light="whale" tabindex="0" role="radio" aria-checked="false">
+            <div class="lamp-fixture lamp-whale">
+              <div class="lamp-glow"></div>
+              <div class="lamp-icon">🐋</div>
+            </div>
+            <h3 class="lamp-title">Cosmic Whale</h3>
+            <span class="lamp-tone">Bioluminescent Cyan</span>
+            <p class="lamp-dream-preview">Swimming through sunken star clusters with friendly singing leviathans who guide you safely to shore.</p>
+            <button class="btn-lamp-toggle" type="button">Activate Light</button>
+          </div>
+
+          <!-- Light 3: Paper Lantern -->
+          <div class="nightlight-card" data-light="lantern" tabindex="0" role="radio" aria-checked="false">
+            <div class="lamp-fixture lamp-lantern">
+              <div class="lamp-glow"></div>
+              <div class="lamp-icon">🏮</div>
+            </div>
+            <h3 class="lamp-title">Sakura Lantern</h3>
+            <span class="lamp-tone">Soft Blossom Pink</span>
+            <p class="lamp-dream-preview">A midnight garden festival where origami birds carry your daytime worries into the sunset.</p>
+            <button class="btn-lamp-toggle" type="button">Activate Light</button>
+          </div>
+
+          <!-- Light 4: Slumbering Bear -->
+          <div class="nightlight-card" data-light="bear" tabindex="0" role="radio" aria-checked="false">
+            <div class="lamp-fixture lamp-bear">
+              <div class="lamp-glow"></div>
+              <div class="lamp-icon">🐻</div>
+            </div>
+            <h3 class="lamp-title">Slumbering Bear</h3>
+            <span class="lamp-tone">Honey Gold & Moss</span>
+            <p class="lamp-dream-preview">A cozy hollow lined with velvet moss, warm blankets, and fresh blueberry tarts that never get cold.</p>
+            <button class="btn-lamp-toggle" type="button">Activate Light</button>
+          </div>
+
+          <!-- Light 5: The Forbidden Secret Light -->
+          <div class="nightlight-card secret-lamp" data-light="forbidden" tabindex="0" role="radio" aria-checked="false">
+            <div class="lamp-fixture lamp-forbidden">
+              <div class="lamp-glow"></div>
+              <div class="lamp-icon">🗝️</div>
+            </div>
+            <h3 class="lamp-title">Forbidden Lantern</h3>
+            <span class="lamp-tone pulse-red">Eerie Crimson Pulse</span>
+            <p class="lamp-dream-preview"><em>[CLASSIFIED FILE]</em> A secret corridor behind the clock where bad dreams are broken down into harmless stardust. (Keycode: <code>NIGHTMARE</code>)</p>
+            <button class="btn-lamp-toggle" type="button">Examine Secret</button>
+          </div>
+        </div>
+
+        <!-- Active Light Dream Reveal Banner -->
+        <div class="active-dream-banner" id="active-dream-banner" aria-live="polite">
+          <div class="banner-sparkle">✦</div>
+          <div class="banner-body">
+            <h4 id="active-dream-title">No Light Selected</h4>
+            <p id="active-dream-desc">Select any nightlight above to bathe the nursery in its protective glow and reveal its dream story.</p>
+          </div>
+          <button class="btn btn-outline btn-save-favorite" id="btn-save-light-fav" type="button" disabled>
+            ⭐ Set as Favorite
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION G: INTERACTIVE PROJECT THREE: DREAM DELIVERY CONSOLE
+         ======================================================== -->
+    <section id="delivery-console" class="section delivery-section" aria-labelledby="delivery-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">INTERACTIVE PROJECT 03</span>
+          <h2 id="delivery-title" class="section-title">Dream Delivery Console 🚀</h2>
+          <p class="section-subtitle">Package a custom bedtime dream capsule and launch it through the celestial pneumatic tube!</p>
+        </div>
+
+        <div class="delivery-workbench">
+          <!-- Left: Formulation Panel -->
+          <div class="dispatch-panel">
+            <form id="dream-dispatch-form">
+              <!-- Destination -->
+              <div class="form-group">
+                <label for="dispatch-dest" class="form-label">1. SELECT DREAM RECIPIENT:</label>
+                <select id="dispatch-dest" class="form-select" required>
+                  <option value="puppy">🐶 Slumbering Golden Puppy (Dream: Flying Bacon Ball)</option>
+                  <option value="stargazer">🔭 Stargazer's Attic (Dream: Kitten Constellation)</option>
+                  <option value="baker">🥖 Overworked Night Baker (Dream: Self-Kneading Brioche)</option>
+                  <option value="diver">🚢 Deep Sea Submarine (Dream: Dancing Coral Reef)</option>
+                  <option value="cradle">👶 Cloud City Crib (Dream: Warm Lavender Lullaby)</option>
+                </select>
+              </div>
+
+              <!-- Dream Flavors / Ingredients -->
+              <div class="form-group">
+                <label class="form-label">2. CHOOSE STAR-DUST INGREDIENTS:</label>
+                <div class="ingredient-grid">
+                  <label class="checkbox-pill">
+                    <input type="checkbox" name="flavor" value="Spun Sugar" checked>
+                    <span>☁️ Spun Sugar Clouds</span>
+                  </label>
+                  <label class="checkbox-pill">
+                    <input type="checkbox" name="flavor" value="Lavender Fog" checked>
+                    <span>🪻 Lavender Fog</span>
+                  </label>
+                  <label class="checkbox-pill">
+                    <input type="checkbox" name="flavor" value="Silver Stardust">
+                    <span>✨ Silver Stardust</span>
+                  </label>
+                  <label class="checkbox-pill">
+                    <input type="checkbox" name="flavor" value="Warm Cinnamon">
+                    <span>🍂 Warm Cinnamon</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Dispatch Priority -->
+              <div class="form-group">
+                <label class="form-label">3. DELIVERY SPEED:</label>
+                <div class="radio-pill-group">
+                  <label class="radio-pill">
+                    <input type="radio" name="speed" value="gentle" checked>
+                    <span>Gentle Drift</span>
+                  </label>
+                  <label class="radio-pill">
+                    <input type="radio" name="speed" value="express">
+                    <span>Express Starlight</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Launch CTA -->
+              <button type="submit" class="btn btn-primary btn-dispatch-rocket" id="btn-dispatch-dream">
+                <span class="btn-icon">🚀</span> PACKAGE & DISPATCH DREAM
+              </button>
+            </form>
+          </div>
+
+          <!-- Right: Pneumatic Tube Flight Stage -->
+          <div class="dispatch-viewport">
+            <div class="tube-glass-pipe">
+              <div class="pipe-glow"></div>
+              <!-- Moving Capsule -->
+              <div class="dream-capsule" id="dream-capsule">
+                <span class="capsule-icon">💊</span>
+                <span class="capsule-tail"></span>
+              </div>
+            </div>
+
+            <!-- Terminal Output / Receipt -->
+            <div class="dispatch-receipt" id="dispatch-receipt">
+              <div class="receipt-header">✦ DISPATCH STATUS: READY ✦</div>
+              <p id="receipt-text">Awaiting formulation parameters. Select a recipient and press dispatch to launch dream package.</p>
+              <div class="receipt-stats">
+                <span>SPEED: <strong id="receipt-speed">Sub-light</strong></span>
+                <span>DEST: <strong id="receipt-dest">Puppy Bed</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION M: DREAMS DELIVERED VINTAGE ROLLING ODOMETER -->
+        <div class="odometer-container" aria-label="Total Dreams Delivered Counter">
+          <div class="odometer-frame">
+            <div class="odometer-title">
+              <span class="star-sparkle">★</span> TOTAL DREAMS DELIVERED WORLDWIDE <span class="star-sparkle">★</span>
+            </div>
+            <div class="odometer-display" id="odometer-display" aria-live="polite">
+              <!-- Individual rolling tumbler digits -->
+              <div class="odometer-digit" data-digit="1"><div class="digit-strip">0 1 2 3 4 5 6 7 8 9</div></div>
+              <div class="odometer-digit" data-digit="0"><div class="digit-strip">0 1 2 3 4 5 6 7 8 9</div></div>
+              <div class="odometer-digit" data-digit="4"><div class="digit-strip">0 1 2 3 4 5 6 7 8 9</div></div>
+              <div class="odometer-separator">,</div>
+              <div class="odometer-digit" data-digit="2"><div class="digit-strip">0 1 2 3 4 5 6 7 8 9</div></div>
+              <div class="odometer-digit" data-digit="8"><div class="digit-strip">0 1 2 3 4 5 6 7 8 9</div></div>
+              <div class="odometer-digit" data-digit="7"><div class="digit-strip">0 1 2 3 4 5 6 7 8 9</div></div>
+            </div>
+            <div class="odometer-note">Updated live every time you dispatch a dream from the Midnight Nursery!</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION O: DREAM JAR SURPRISE (Bedside Mason Jar Prophecies)
+         ======================================================== -->
+    <section id="dream-jar" class="section jar-section" aria-labelledby="jar-title">
+      <div class="container jar-container">
+        <div class="jar-visual-col">
+          <div class="mason-jar" id="mason-jar" role="button" tabindex="0" aria-label="Click to open bedside dream jar">
+            <div class="jar-lid"></div>
+            <div class="jar-glass">
+              <div class="jar-fireflies">
+                <span class="firefly f1">✦</span>
+                <span class="firefly f2">★</span>
+                <span class="firefly f3">✧</span>
+                <span class="firefly f4">✦</span>
+                <span class="firefly f5">★</span>
+              </div>
+              <div class="jar-label">DREAM<br>PROPHECY</div>
+            </div>
+          </div>
+          <div class="jar-tap-instruction">👆 Tap the jar to release a star prophecy!</div>
+        </div>
+
+        <div class="jar-info-col">
+          <span class="section-tag">BEDSIDE WONDER</span>
+          <h2 id="jar-title" class="section-title">Pip's Dream Jar Surprise 🫙</h2>
+          <p class="section-subtitle">Inside this enchanted apothecary jar, stray dreams coalesce into tiny whimsical prophecies. Shake the glass to draw one for tonight.</p>
+
+          <div class="prophecy-card" id="prophecy-card" aria-live="polite">
+            <div class="prophecy-badge" id="prophecy-rarity">✨ COMMON PROPHECY</div>
+            <p class="prophecy-text" id="prophecy-text">
+              “Tonight, you will dream of walking on warm sponge cakes across a low-gravity kitchen, catching sugar stars with a silver spoon.”
+            </p>
+            <div class="prophecy-actions">
+              <button class="btn btn-secondary btn-sm" id="btn-draw-prophecy" type="button">
+                🫙 Draw Another Prophecy
+              </button>
+              <button class="btn btn-outline btn-sm" id="btn-speak-jar" type="button">
+                🗣️ Pip's Blessing
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION I: PIP'S CHAT INTERFACE
+         ======================================================== -->
+    <section id="pip-chat" class="section chat-section" aria-labelledby="chat-title">
+      <div class="container chat-container">
+        <div class="section-header">
+          <span class="section-tag">TWO-WAY DREAM COMMUNICATOR</span>
+          <h2 id="chat-title" class="section-title">Whisper with Pip 💬</h2>
+          <p class="section-subtitle">Ask questions about dreams, lullabies, the nursery, or his secret shift.</p>
+        </div>
+
+        <div class="chat-terminal">
+          <!-- Chat Header -->
+          <div class="chat-header">
+            <div class="chat-user-status">
+              <div class="chat-avatar">
+                <img src="assets/images/pip-cute.png" alt="Pip Avatar" id="chat-avatar-img">
+              </div>
+              <div class="chat-user-meta">
+                <span class="chat-name">Pip (Junior Dream Engineer)</span>
+                <span class="chat-online-badge">● Online • Fluffing Clouds</span>
+              </div>
+            </div>
+            <div class="chat-actions">
+              <button class="chat-clear-btn" id="btn-clear-chat" type="button" title="Clear chat history">Clear</button>
+            </div>
+          </div>
+
+          <!-- Quick Suggestion Chips -->
+          <div class="chat-chips-bar" aria-label="Conversation starters">
+            <button class="chat-chip" type="button">Who are you, Pip?</button>
+            <button class="chat-chip" type="button">What is the Midnight Nursery?</button>
+            <button class="chat-chip" type="button">Tell me about your secret form...</button>
+            <button class="chat-chip" type="button">Can you sing a lullaby?</button>
+            <button class="chat-chip" type="button">Have you been good today?</button>
+            <button class="chat-chip" type="button">I had a bad dream!</button>
+          </div>
+
+          <!-- Message History -->
+          <div class="chat-messages" id="chat-messages" role="log" aria-live="polite">
+            <!-- Initial Welcome Message from Pip -->
+            <div class="chat-msg pip-msg">
+              <div class="msg-bubble">
+                <p>Oh! A new dreamer. Welcome to my tiny corner of midnight. Pull up a cloud and ask me anything!</p>
+                <span class="msg-time">Just now</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Typing Indicator -->
+          <div class="chat-typing" id="chat-typing" style="display: none;">
+            <span></span><span></span><span></span>
+            <em>Pip is fluffing a cloud to reply...</em>
+          </div>
+
+          <!-- Input Bar -->
+          <form class="chat-input-form" id="chat-form">
+            <input 
+              type="text" 
+              id="chat-input" 
+              class="chat-input" 
+              placeholder="Ask Pip anything... (e.g. 'Can you sing a lullaby?')" 
+              maxlength="100" 
+              autocomplete="off"
+              required
+            >
+            <span class="chat-char-counter" id="chat-char-count">0/100</span>
+            <button type="submit" class="btn btn-primary btn-chat-send" id="btn-chat-send">
+              SEND ✦
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+
+
+
+    <!-- ========================================================
+         SECTION N: DREAM GUESTBOOK (Bedtime Wishes)
+         ======================================================== -->
+    <section id="guestbook" class="section guestbook-section" aria-labelledby="guestbook-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">COMMUNITY STARLIGHT VAULT</span>
+          <h2 id="guestbook-title" class="section-title">The Bedtime Wish Pillow 📖</h2>
+          <p class="section-subtitle">Leave a peaceful wish or a sleepy thought. Pip preserves them locally in your browser's private memory pillow.</p>
+        </div>
+
+        <div class="guestbook-layout">
+          <!-- Form -->
+          <div class="guestbook-card form-card">
+            <h3>✦ Leave Your Midnight Wish</h3>
+            <form id="guestbook-form">
+              <div class="form-group">
+                <label for="wish-author" class="form-label">DREAMER NICKNAME:</label>
+                <input type="text" id="wish-author" class="form-input" placeholder="e.g. Luna the Stargazer" maxlength="24" required>
+              </div>
+
+              <div class="form-group">
+                <label for="wish-content" class="form-label">YOUR BEDTIME WISH (MAX 140 CHARS):</label>
+                <textarea id="wish-content" class="form-textarea" rows="3" placeholder="I wish for soft rain on the rooftop and sweet dreams for all dogs..." maxlength="140" required></textarea>
+                <span class="char-count" id="wish-char-count">0/140</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">STICKER SEAL:</label>
+                <div class="sticker-select-row" role="radiogroup" aria-label="Wish Sticker">
+                  <label class="sticker-option"><input type="radio" name="sticker" value="🌙" checked> <span>🌙 Moon</span></label>
+                  <label class="sticker-option"><input type="radio" name="sticker" value="🧸"> <span>🧸 Bear</span></label>
+                  <label class="sticker-option"><input type="radio" name="sticker" value="🍪"> <span>🍪 Cookie</span></label>
+                  <label class="sticker-option"><input type="radio" name="sticker" value="☁️"> <span>☁️ Cloud</span></label>
+                  <label class="sticker-option"><input type="radio" name="sticker" value="😈"> <span>😈 Mischief</span></label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block">
+                ✨ TUCK WISH INTO GUESTBOOK
+              </button>
+            </form>
+
+            <div class="privacy-disclaimer">
+              🔒 <strong>Local Privacy Guarantee:</strong> Your wishes are safely stored directly in this browser using LocalStorage. They are never transmitted or shared externally.
+            </div>
+          </div>
+
+          <!-- Entries Wall -->
+          <div class="guestbook-card wall-card">
+            <div class="wall-header">
+              <h3>✦ Tucked Wishes (<span id="wish-count-display">3</span>)</h3>
+              <button class="btn-text-action" id="btn-clear-wishes" type="button">Clear Wishes</button>
+            </div>
+            
+            <div class="wishes-scroller" id="wishes-list" role="feed" aria-label="Visitor Wishes">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION P: CLOSING SCENE & PIP'S LULLABY
+         ======================================================== -->
+    <section id="closing" class="section closing-section" aria-labelledby="closing-title">
+      <div class="container closing-container">
+        <!-- Interactive Secret Moon & Pip -->
+        <div class="closing-moon-stage">
+          <!-- Secret Star Easter Egg (preserved, repositioned) -->
+          <button class="hidden-secret-star" id="secret-star-btn" type="button" aria-label="A tiny secret twinkling star" style="position:absolute;top:0.5rem;right:0.5rem;">✦</button>
+          <div class="closing-pip-vignette">
+            <img src="assets/images/pip-closing.png" alt="Pip resting on a glowing cloud with his lantern and music box" id="closing-pip-img" class="closing-pip-avatar">
+          </div>
+        </div>
+
+        <div class="closing-content">
+          <span class="section-tag">BEDTIME BLESSING</span>
+          <h2 id="closing-title" class="section-title">Goodnight, Little Dreamer 🌙</h2>
+          
+          <!-- Lullaby Poem Player -->
+          <div class="lullaby-poem-box">
+            <div class="poem-lines" id="poem-text">
+              <p class="poem-line l1">“Little moon, sleepy star,</p>
+              <p class="poem-line l2">Dreams can find you where you are.</p>
+              <p class="poem-line l3">Close your eyes and drift away,</p>
+              <p class="poem-line l4">I'll keep watch until the day.”</p>
+            </div>
+
+            <div class="poem-player-controls">
+              <button class="btn btn-primary" id="btn-play-lullaby-poem" type="button">
+                🎶 Listen to Pip's Lullaby
+              </button>
+              <button class="btn btn-capsule" id="btn-launch-capsule" type="button" title="Launch a Dream Capsule to the cosmos!">
+                🌠 Launch Dream Capsule
+              </button>
+              <a href="#hero" class="btn btn-outline">
+                ⬆ Back to Top
+              </a>
+            </div>
+          </div>
+
+          <div class="closing-secret-reveal" id="closing-secret-reveal" style="display: none;" aria-live="polite">
+            <div class="secret-box">
+              <h4>🌟 You Found Pip's Secret Star! 🌟</h4>
+              <p>“Psst! You're officially an Honorary Dream Engineer of haX.baby Track 1. May your pillows always stay cool on both sides and your dreams never be ordinary.”</p>
+              <span class="badge-tag">Boss Level Complete: Tier 3 Legendary</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================== 
+       DREAM CAPSULE PORTAL — Floating overlay (injected by JS)
+       ======================================================== -->
+  <div id="capsule-portal" aria-live="assertive" aria-label="Dream Capsule Delivery Portal"></div>
+
+  <!-- ======================================================== 
+       DREAM CONFETTI CANVAS (full-screen, pointer-events: none)
+       ======================================================== -->
+  <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9000;"></canvas>
+
+  <!-- ========================================================
+       SECTION H: PIP'S MEMORY MODAL (LocalStorage Inspector)
+       ======================================================== -->
+  <div id="memory-modal" class="memory-modal" role="dialog" aria-modal="true" aria-labelledby="memory-title" style="display: none;">
+    <div class="memory-card-box">
+      <div class="memory-header">
+        <h3 id="memory-title">🧠 Pip's Bedtime Memory Bank</h3>
+        <button id="btn-close-memory" class="close-x-btn" type="button" aria-label="Close Memory Modal">&times;</button>
+      </div>
+
+      <div class="memory-body">
+        <p class="memory-intro">
+          Pip keeps a small mental pillow in your browser's LocalStorage to make sure your bedside preferences stay intact between visits.
+        </p>
+
+        <div class="memory-stats-grid">
+          <div class="mem-stat-item">
+            <span class="mem-label">VISITOR STATUS:</span>
+            <span class="mem-val" id="mem-visitor-status">Checking...</span>
+          </div>
+          <div class="mem-stat-item">
+            <span class="mem-label">VISIT COUNT:</span>
+            <span class="mem-val" id="mem-visit-count">1</span>
+          </div>
+          <div class="mem-stat-item">
+            <span class="mem-label">SECRET FORM UNLOCKED:</span>
+            <span class="mem-val" id="mem-secret-discovered">No</span>
+          </div>
+          <div class="mem-stat-item">
+            <span class="mem-label">FAVORITE NIGHTLIGHT:</span>
+            <span class="mem-val" id="mem-favorite-light">None Selected</span>
+          </div>
+          <div class="mem-stat-item">
+            <span class="mem-label">DREAMS DISPATCHED:</span>
+            <span class="mem-val" id="mem-dreams-sent">0</span>
+          </div>
+          <div class="mem-stat-item">
+            <span class="mem-label">SOUND SETTING:</span>
+            <span class="mem-val" id="mem-sound-status">Enabled</span>
+          </div>
+        </div>
+
+        <div class="memory-controls">
+          <button id="btn-reset-memory" class="btn btn-outline btn-danger" type="button">
+            🧹 Clear Pip's Memory & Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Persistent Floating Audio HUD Bar -->
+  <aside class="floating-audio-hud" id="audio-hud" aria-label="Audio Playback Bar">
+    <div class="hud-now-playing">
+      <span class="audio-wave-anim" id="audio-wave-bars">
+        <i></i><i></i><i></i><i></i>
+      </span>
+      <span class="audio-track-name" id="audio-track-label">Ambient Starlight Silence</span>
+    </div>
+    <div class="hud-audio-actions">
+      <button class="hud-audio-btn" id="hud-voice-replay" type="button" title="Replay Last Voice Clip">🗣️ Replay</button>
+      <button class="hud-audio-btn" id="hud-sound-toggle" type="button" title="Mute/Unmute Audio">🔊</button>
+    </div>
+  </aside>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Master Application Script -->
+  <script src="script.js"></script>
+</body>
+</html>
